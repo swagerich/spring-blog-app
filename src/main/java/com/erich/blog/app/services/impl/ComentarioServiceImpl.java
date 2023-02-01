@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
@@ -89,14 +88,6 @@ public class ComentarioServiceImpl implements ComentarioService {
         }
     }
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public List<ComentarioDto> findByPublicarId(Long publiId) {
-//        return comentarioRepo.findByPublicarId(publiId).stream()
-//                .map(ComentarioDto::fromEntity)
-//                .filter(Objects::nonNull)
-//                .toList();
-//    }
 
     @Override
     @Transactional(readOnly = true)

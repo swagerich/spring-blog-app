@@ -20,10 +20,10 @@ public interface PublicarApi {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = APP_ROOT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "crea una nueva publicion.", description = "Este método le permite crear  publicaciones")
+    @Operation(summary = "crea una nueva publicacion.", description = "Este método le permite crear  publicaciones")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "El objeto publicar crea/modifica"),
-            @ApiResponse(responseCode = "400", description = "El objeto artículo no es válido")
+            @ApiResponse(responseCode = "400", description = "El objeto publicar no es válido")
     })
     ResponseEntity<PublicarDto> save(@Valid @RequestBody PublicarDto publicarDto);
 
@@ -70,9 +70,17 @@ public interface PublicarApi {
     })
     ResponseEntity<List<PublicarDto>> findAll();
 
+    @GetMapping(value = APP_ROOT + "/categoria/{categId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Devuelve la lista de publicaciones por categoria id.", description = "Este método le permite buscar publicaciones por categorias y devolver la lista de publicaciones que existen en la bd")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de las  publicaciones"),
+    })
+    ResponseEntity<List<PublicarDto>> getPublicacionesByCategoriaId(@PathVariable Long categId);
+
+
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(APP_ROOT + "/{id}")
-    @Operation(summary = "Eliminamos la publicacion", description = "El metodo permite eliminar la publicacion en la bd")
+    @Operation(summary = "Eliminamos la publicacion", description = "El metodo permite eliminar la publicacion de la bd")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Eliminamos la publicacion por su id"),
     })

@@ -5,10 +5,7 @@ import com.erich.blog.app.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -48,6 +45,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests().requestMatchers("/api/v1/auth/**",
                         "/api/v1/publicar/all",
+                        "/api/v1/categoria/all",
                         "/swagger-ui-blog.html/**",
                         "/swagger-ui.html",
                         "/swagger-ui/**",

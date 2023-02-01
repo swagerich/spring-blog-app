@@ -25,4 +25,6 @@ public interface PublicarService {
 
     Resource viewPhoto(Long id);
 
+    List<PublicarDto> getPublicacionesByCategoriaId(Long categId);
+
 }

@@ -1,9 +1,6 @@
 package com.erich.blog.app.handler;
 
-import com.erich.blog.app.exception.BadRequestException;
-import com.erich.blog.app.exception.ComentarioNotFoundExeption;
-import com.erich.blog.app.exception.NotFoundException;
-import com.erich.blog.app.exception.PublicacionNotFoundException;
+import com.erich.blog.app.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.validation.FieldError;
@@ -43,6 +40,15 @@ public class HandlerException {
     public ProblemDetail HandlerPublicacionNotFoundException(PublicacionNotFoundException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
         problemDetail.setTitle("Publicacion Not Found");
+        problemDetail.setDetail(e.getMessage());
+        problemDetail.setProperty("Hora", LocalDate.now());
+        return problemDetail;
+    }
+
+    @ExceptionHandler(CategoriaNotFoundException.class)
+    public ProblemDetail HandlerPublicacionNotFoundException(CategoriaNotFoundException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
+        problemDetail.setTitle("Categoria Not Found");
         problemDetail.setDetail(e.getMessage());
         problemDetail.setProperty("Hora", LocalDate.now());
         return problemDetail;

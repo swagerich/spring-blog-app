@@ -37,7 +37,7 @@ public class PublicarController implements PublicarApi {
     }
 
     @Override
-    public ResponseEntity<PublicarDto> updateWithPhoto(PublicarDto publicarDto, Long id, MultipartFile file) throws IOException {
+    public ResponseEntity<PublicarDto> updateWithPhoto(PublicarDto publicarDto, Long id, MultipartFile file){
         return new ResponseEntity<>(publicarService.updateWithPhoto(publicarDto, id, file), HttpStatus.CREATED);
     }
 
@@ -49,6 +49,11 @@ public class PublicarController implements PublicarApi {
     @Override
     public ResponseEntity<List<PublicarDto>> findAll() {
         return new ResponseEntity<>(publicarService.findAll(), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<PublicarDto>> getPublicacionesByCategoriaId(Long categId) {
+        return new ResponseEntity<>(publicarService.getPublicacionesByCategoriaId(categId),HttpStatus.OK);
     }
 
     @Override

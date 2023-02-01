@@ -1,10 +1,8 @@
 package com.erich.blog.app.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,5 +34,9 @@ public class Publicar {
 //    public Integer getPhotoHashCode() {
 //        return this.photo != null ? Arrays.hashCode(this.photo) : null;
 //    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
 
 }

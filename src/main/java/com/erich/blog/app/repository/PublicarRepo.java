@@ -10,4 +10,6 @@ public interface PublicarRepo extends CrudRepository<Publicar,Long> {
 
     @Query("SELECT p FROM Publicar p INNER JOIN p.comentarios c where c.id=?1")
     List<Publicar> findAllComentarios();
+
+    List<Publicar> findByCategoriaId(Long categoriaId);
 }
