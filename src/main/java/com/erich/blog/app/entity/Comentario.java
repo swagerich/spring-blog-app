@@ -23,6 +23,6 @@ public class Comentario {
     private String texto;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "publicacion_id", nullable = false)
+    @JoinColumn(name = "publicacion_id")
     private Publicar publicar;
 }

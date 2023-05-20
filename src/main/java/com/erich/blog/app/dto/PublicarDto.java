@@ -33,7 +33,7 @@ public class PublicarDto {
 
     private CategoriaDto categoria;
 
-  //  private Long categoriaId;
+    //  private Long categoriaId;
 
     public static PublicarDto fromEntity(Publicar publicar) {
         if (publicar == null) {
@@ -45,7 +45,7 @@ public class PublicarDto {
                 .titulo(publicar.getTitulo())
                 .descripcion(publicar.getDescripcion())
                 .contenido(publicar.getContenido())
-                //.categoria(CategoriaDto.fromEntity(publicar.getCategoria()))
+                .categoria(CategoriaDto.fromEntity(publicar.getCategoria()))
                 .build();
     }
 

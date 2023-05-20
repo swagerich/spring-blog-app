@@ -18,7 +18,7 @@ import java.util.List;
 
 public interface PublicarApi {
 
-    @PreAuthorize("hasRole('ADMIN')")
+   // @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = APP_ROOT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "crea una nueva publicacion.", description = "Este método le permite crear  publicaciones")
     @ApiResponses(value = {

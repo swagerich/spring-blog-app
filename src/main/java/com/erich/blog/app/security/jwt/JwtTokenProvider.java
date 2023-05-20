@@ -1,15 +1,17 @@
 package com.erich.blog.app.security.jwt;
 
-import com.erich.blog.app.exception.BadRequestException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 @Component
 public class JwtTokenProvider {
@@ -21,7 +23,54 @@ public class JwtTokenProvider {
     private Long expiration;
 
 
-    //generacion de jwt
+    public String generateToken(UserDetails userDetails){
+        Map<String,Object> claims=new HashMap<>();
+        return createToken(claims,userDetails);
+    }
+
+    private String createToken(Map<String, Object> claims, UserDetails userDetails) {
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(key(), SignatureAlgorithm.HS256).compact();
+    }
+    private Key key() {
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+    }
+
+    public Boolean validateToken(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+    private Boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
+    public Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    /*//generacion de jwt
     public String generateToken(Authentication authentication) {
 
         String username = authentication.getName();
@@ -50,11 +99,6 @@ public class JwtTokenProvider {
         return claims.getSubject();
     }
 
-    private Key key() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
-    }
-
-
     //validate jwt token
     public boolean validateToken(String token) {
         try {
@@ -72,5 +116,5 @@ public class JwtTokenProvider {
         } catch (IllegalArgumentException e) {
             throw new BadRequestException("Jwt Claims String is empty ");
         }
-    }
+    }*/
 }

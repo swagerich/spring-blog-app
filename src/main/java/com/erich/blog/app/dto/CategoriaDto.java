@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Data
 @Builder
@@ -36,8 +36,8 @@ public class CategoriaDto {
                 .id(categoria.getId())
                 .nombre(categoria.getNombre())
                 .descripcion(categoria.getDescripcion())
-                .publicars(categoria.getPublicars() != null ?
-                        categoria.getPublicars().stream().map(PublicarDto::fromEntity).collect(Collectors.toList()) : null)
+//                .publicars(categoria.getPublicars() != null ?
+//                        categoria.getPublicars().stream().map(PublicarDto::fromEntity).collect(Collectors.toList()) : null)
                 .build();
     }
 

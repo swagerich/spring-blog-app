@@ -50,11 +50,6 @@ public class SecurityConfig {
                         "/swagger-ui.html",
                         "/swagger-ui/**",
                         "/v3/api-docs/**").permitAll()
-//                .authorizeHttpRequests().requestMatchers(HttpMethod.POST,"/api/v1/auth/**")
-//                .permitAll()
-//                .and()
-//                .authorizeHttpRequests().requestMatchers(HttpMethod.GET,"/api/v1/publicar")
-//                .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -97,7 +92,7 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOriginPatterns(Collections.singletonList(""));
+        config.setAllowedOriginPatterns(Collections.singletonList("http://localhost:4200"));
         config.setAllowedHeaders(Arrays.asList("Origin","Content-Type","Accept","Authorization"));
         config.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS","PATH"));
         source.registerCorsConfiguration("/**",config);

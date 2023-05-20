@@ -3,6 +3,7 @@ package com.erich.blog.app.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,9 +32,9 @@ public class Publicar {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comentario> comentarios = new HashSet<>();
 
-//    public Integer getPhotoHashCode() {
-//        return this.photo != null ? Arrays.hashCode(this.photo) : null;
-//    }
+    public Integer getPhotoHashCode() {
+        return this.photo != null ? Arrays.hashCode(this.photo) : null;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id")

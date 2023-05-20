@@ -6,8 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @SpringBootApplication
 public class SpringBlogAppApplication implements CommandLineRunner {
@@ -25,7 +25,7 @@ public class SpringBlogAppApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args)  {
 
-		List<Role> roles = new ArrayList<>();
+		Set<Role> roles = new HashSet<>();
 		Role roleAdmin = new Role();
 		roleAdmin.setAuthority("ROLE_ADMIN");
 		Role roleUser = new Role();

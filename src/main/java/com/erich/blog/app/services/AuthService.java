@@ -1,12 +1,13 @@
 package com.erich.blog.app.services;
 
-import com.erich.blog.app.dto.auth.LoginDto;
-import com.erich.blog.app.dto.auth.RegistroDto;
+import com.erich.blog.app.dto.auth.response.JwtResponse;
+import com.erich.blog.app.dto.auth.request.LoginRequest;
+import com.erich.blog.app.dto.auth.request.SignupRequest;
 
 public interface AuthService {
 
-    String login(LoginDto loginDto);
+    JwtResponse login(LoginRequest loginRequest);
 
-    String registro(RegistroDto registroDto);
+    String registro(SignupRequest signupRequest);
 
 }
