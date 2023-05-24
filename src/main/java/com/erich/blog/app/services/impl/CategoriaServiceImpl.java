@@ -3,7 +3,7 @@ package com.erich.blog.app.services.impl;
 import com.erich.blog.app.dto.CategoriaDto;
 import com.erich.blog.app.entity.Categoria;
 import com.erich.blog.app.exception.BadRequestException;
-import com.erich.blog.app.exception.CategoriaNotFoundException;
+import com.erich.blog.app.exception.NotFoundException;
 import com.erich.blog.app.repository.CategoriaRepo;
 import com.erich.blog.app.services.CategoriaService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +22,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     private final CategoriaRepo categoriaRepo;
 
     @Override
+    @Transactional
     public CategoriaDto save(CategoriaDto categoriaDto) {
         Categoria categoria = CategoriaDto.toEntity(categoriaDto);
         if (categoria != null) {
@@ -38,16 +39,18 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CategoriaDto getCategoriaId(Long id) {
-        Categoria categoria = categoriaRepo.findById(id).orElseThrow(() -> new CategoriaNotFoundException("No se encontro el id " + id + "en la bd"));
+        Categoria categoria = categoriaRepo.findById(id).orElseThrow(() -> new NotFoundException("No se encontro el id " + id + "en la bd"));
         return CategoriaDto.fromEntity(categoria);
     }
 
     @Override
+    @Transactional
     public CategoriaDto update(CategoriaDto categoriaDto, Long id) {
 
         if(!categoriaRepo.existsById(id)){
-            throw new CategoriaNotFoundException("No existe el id " + id);
+            throw new NotFoundException("No existe el id " + id);
         }
 
         return categoriaRepo.findById(id).map(c ->{

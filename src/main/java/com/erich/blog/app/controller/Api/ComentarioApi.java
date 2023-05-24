@@ -1,11 +1,11 @@
 package com.erich.blog.app.controller.Api;
 
 import com.erich.blog.app.dto.ComentarioDto;
+import com.erich.blog.app.dto.response.CommentsWithPaginatedResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +24,12 @@ public interface ComentarioApi {
     })
     ResponseEntity<ComentarioDto> saveComentarioInPublicacion(@Valid @RequestBody ComentarioDto comentarioDto, @PathVariable Long publiId);
 
-    @GetMapping(value = APP_ROOT_CO + "/allcomentInPubli/{publiId}/{page}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Devuelve la lista de comentarios  por publicaciones id usando paginacion.", description = "Este método le permite devolver la lista de comentarios por id de publicaciones que existen en la bd")
+    @GetMapping(value = APP_ROOT_CO + "/allcommentPage", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Devuelve la lista de comentarios paginados  por publicaciones id", description = "Este método le permite devolver la lista de comentarios paginados por el id de la publicacion que existen en la bd")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de los  comentarios con paginacion"),
+            @ApiResponse(responseCode = "200", description = "Lista de los comentarios con paginacion"),
     })
-    ResponseEntity<Page<ComentarioDto>> findAllComentarioInPublicacionById(@PathVariable Integer page, @PathVariable Long publiId);
+    ResponseEntity<CommentsWithPaginatedResponse> findAllComentarioInPublicacionById(@RequestParam(required = false) Long publiId , @RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "5") Integer size );
 
     @GetMapping(value = APP_ROOT_CO + "/{comdId}/{publId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Devuelve el comentario id junto con la publicacion id.", description = "Este método le permite devolver el  objeto comentario id junto con el objeto publicacion id")
@@ -38,14 +38,14 @@ public interface ComentarioApi {
     })
     ResponseEntity<ComentarioDto> findComentIdAndPublicId(@PathVariable Long comdId, @PathVariable Long publId);
 
-    @GetMapping
+    @GetMapping(value = APP_ROOT_CO + "/all")
     @Operation(summary = "Devuelve la lista de comentarios.", description = "Este método le permite devolver la lista de comentarios  que existen en la bd")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de los  comentarios"),
     })
     ResponseEntity<List<ComentarioDto>> findAll();
 
-    @GetMapping(value = APP_ROOT_CO + "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = APP_ROOT_CO + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Devuelve el comentario por su id.", description = "Este método le permite devolver el comentarios por id  que existe en la bd")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Obtenemos el comentario mediante el id"),

@@ -27,5 +27,5 @@ springdoc:
 app:
   jwt:
     secret-key: e7918a5ed84f1c35da180cadc375efa01bd50323f27b747bd6b802cefa48f487
-    expiration: 6048000
-    refreshTokenDurationMs: 600000
+    expiration: 1800000
+    refreshTokenDurationMs: 3600000

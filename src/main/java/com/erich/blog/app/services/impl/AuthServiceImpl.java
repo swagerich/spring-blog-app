@@ -95,7 +95,7 @@ public class AuthServiceImpl implements AuthService {
         roles.add(roleAdmin);
         user.setRoles(roles);
         userRepo.save(user);
-        return "Administrador registrado con exito!";
+        return "Administrador " + user.getUsername() + " registrado con exito";
     }
 
     private void validationFieldSignup(SignupRequest signupRequest) {

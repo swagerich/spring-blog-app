@@ -27,33 +27,6 @@ public class HandlerException {
         return problemDetail;
     }
 
-    @ExceptionHandler(ComentarioNotFoundExeption.class)
-    public ProblemDetail HandlerComentarioNotFoundException(ComentarioNotFoundExeption e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
-        problemDetail.setTitle("Comentario Not Found");
-        problemDetail.setDetail(e.getMessage());
-        problemDetail.setProperty("Hora", LocalDate.now());
-        return problemDetail;
-    }
-
-    @ExceptionHandler(PublicacionNotFoundException.class)
-    public ProblemDetail HandlerPublicacionNotFoundException(PublicacionNotFoundException e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
-        problemDetail.setTitle("Publicacion Not Found");
-        problemDetail.setDetail(e.getMessage());
-        problemDetail.setProperty("Hora", LocalDate.now());
-        return problemDetail;
-    }
-
-    @ExceptionHandler(CategoriaNotFoundException.class)
-    public ProblemDetail HandlerPublicacionNotFoundException(CategoriaNotFoundException e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
-        problemDetail.setTitle("Categoria Not Found");
-        problemDetail.setDetail(e.getMessage());
-        problemDetail.setProperty("Hora", LocalDate.now());
-        return problemDetail;
-    }
-
     @ExceptionHandler(BadRequestException.class)
     public ProblemDetail HandlerNotFoundException(BadRequestException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());

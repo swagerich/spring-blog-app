@@ -3,6 +3,7 @@ package com.erich.blog.app.controller.Api;
 import static com.erich.blog.app.utils.paths.Path.*;
 
 import com.erich.blog.app.dto.PublicarDto;
+import com.erich.blog.app.dto.response.PublicationWithPaginatedResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public interface PublicarApi {
 
-   // @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = APP_ROOT, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "crea una nueva publicacion.", description = "Este método le permite crear  publicaciones")
     @ApiResponses(value = {
@@ -70,13 +71,20 @@ public interface PublicarApi {
     })
     ResponseEntity<List<PublicarDto>> findAll();
 
-    @GetMapping(value = APP_ROOT + "/categoria/{categId}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @GetMapping(value = APP_ROOT + "/categoria/{categId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = APP_ROOT + "/categoria/page", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Devuelve la lista de publicaciones por categoria id.", description = "Este método le permite buscar publicaciones por categorias y devolver la lista de publicaciones que existen en la bd")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de las  publicaciones"),
+            @ApiResponse(responseCode = "200", description = "Lista de las  publicaciones por categoria"),
     })
-    ResponseEntity<List<PublicarDto>> getPublicacionesByCategoriaId(@PathVariable Long categId);
+    ResponseEntity<PublicationWithPaginatedResponse> getPublicacionesByCategoriaId(@RequestParam(required = false) Long categId , @RequestParam(defaultValue = "0") int page , @RequestParam(defaultValue = "5") int size);
 
+    @GetMapping(value = APP_ROOT + "/{idPublication}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Devuelve la publicacion por el id.", description = "Este método le permite buscar por el id y devolver la publicacion que existe en la bd")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Obtenemos la publicacion por el id"),
+    })
+    ResponseEntity<?> findById(@PathVariable Long idPublication);
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(APP_ROOT + "/{id}")

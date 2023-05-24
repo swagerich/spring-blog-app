@@ -2,6 +2,7 @@ package com.erich.blog.app.controller;
 
 import com.erich.blog.app.controller.Api.PublicarApi;
 import com.erich.blog.app.dto.PublicarDto;
+import com.erich.blog.app.dto.response.PublicationWithPaginatedResponse;
 import com.erich.blog.app.services.impl.PublicarServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -51,8 +52,13 @@ public class PublicarController implements PublicarApi {
     }
 
     @Override
-    public ResponseEntity<List<PublicarDto>> getPublicacionesByCategoriaId(Long categId) {
-        return new ResponseEntity<>(publicarService.getPublicacionesByCategoriaId(categId),HttpStatus.OK);
+    public ResponseEntity<PublicationWithPaginatedResponse> getPublicacionesByCategoriaId(Long categId, int page, int size) {
+        return new ResponseEntity<>(publicarService.getAllPublicacionesByCategoriaId(categId,page,size),HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> findById(Long idPublication) {
+        return new ResponseEntity<>(publicarService.findById(idPublication),HttpStatus.OK);
     }
 
     @Override

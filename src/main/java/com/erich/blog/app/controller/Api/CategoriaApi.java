@@ -32,7 +32,8 @@ public interface CategoriaApi {
     })
     ResponseEntity<List<CategoriaDto>> findAll();
 
-    @GetMapping("{categoriaId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping(value = APP_ROOT_CA + "/{categoriaId}")
     @Operation(summary = "Devuelve la categoria por su id", description = "Este método le permite devolver la categoria por su id que existen en la bd")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Categoria por id"),
@@ -40,7 +41,7 @@ public interface CategoriaApi {
     ResponseEntity<CategoriaDto> findCategoriaById(@PathVariable Long categoriaId);
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping(value = APP_ROOT_CA + "{categoriaId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = APP_ROOT_CA + "/{categoriaId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Actualiza la categoria por su id.", description = "Este método le permite actualizar y devolver la nueva categoria que existen en la bd")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "El objeto categoria crea/modifica por id"),
@@ -49,7 +50,7 @@ public interface CategoriaApi {
     ResponseEntity<CategoriaDto> updatCategoriaById(@RequestBody CategoriaDto categoriaDto, @PathVariable Long categoriaId);
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping(APP_ROOT_CA + "{categoriaId}")
+    @DeleteMapping(APP_ROOT_CA + "/{categoriaId}")
     @Operation(summary = "Eliminamos la categoria", description = "El metodo permite eliminar la categoria de la bd")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Eliminamos la categoria por su id"),

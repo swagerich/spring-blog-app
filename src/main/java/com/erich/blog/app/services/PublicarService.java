@@ -1,6 +1,7 @@
 package com.erich.blog.app.services;
 
 import com.erich.blog.app.dto.PublicarDto;
+import com.erich.blog.app.dto.response.PublicationWithPaginatedResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +26,6 @@ public interface PublicarService {
 
     Resource viewPhoto(Long id);
 
-    List<PublicarDto> getPublicacionesByCategoriaId(Long categId);
+    PublicationWithPaginatedResponse getAllPublicacionesByCategoriaId(Long categId , int page, int size);
 
 }

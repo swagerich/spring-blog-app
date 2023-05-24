@@ -2,6 +2,7 @@ package com.erich.blog.app.controller;
 
 import com.erich.blog.app.controller.Api.ComentarioApi;
 import com.erich.blog.app.dto.ComentarioDto;
+import com.erich.blog.app.dto.response.CommentsWithPaginatedResponse;
 import com.erich.blog.app.services.impl.ComentarioServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,9 +32,8 @@ public class ComentarioController implements ComentarioApi {
 //    }
 
     @Override
-    public ResponseEntity<Page<ComentarioDto>> findAllComentarioInPublicacionById(Integer page, Long publiId) {
-        PageRequest pageR = PageRequest.of(page, 4);
-        return new ResponseEntity<>(comentarioService.findByPublicarIdPage(pageR, publiId), HttpStatus.OK);
+    public ResponseEntity<CommentsWithPaginatedResponse> findAllComentarioInPublicacionById(Long publiId , Integer page, Integer size ) {
+        return new ResponseEntity<>(comentarioService.findAllCommentsPaginatedByPublicationId(publiId,page,size), HttpStatus.OK);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class ComentarioController implements ComentarioApi {
 
     @Override
     public ResponseEntity<?> deletByIdComentAndPubli(Long comentId, Long publiId) {
-        comentarioService.deleteByComentarioId(comentId, publiId);
+        comentarioService.deleteComentarioById(comentId, publiId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
