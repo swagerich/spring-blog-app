@@ -4,8 +4,6 @@ import com.erich.blog.app.controller.Api.ComentarioApi;
 import com.erich.blog.app.dto.ComentarioDto;
 import com.erich.blog.app.dto.response.CommentsWithPaginatedResponse;
 import com.erich.blog.app.services.impl.ComentarioServiceImpl;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +20,8 @@ public class ComentarioController implements ComentarioApi {
     }
 
     @Override
-    public ResponseEntity<ComentarioDto> saveComentarioInPublicacion(ComentarioDto comentarioDto, Long publiId) {
-        return new ResponseEntity<>(comentarioService.save(comentarioDto, publiId), HttpStatus.CREATED);
+    public ResponseEntity<ComentarioDto> saveComentarioInPublicacion(ComentarioDto comentarioDto, Long publiId, Long userId) {
+        return new ResponseEntity<>(comentarioService.save(comentarioDto, publiId,userId), HttpStatus.CREATED);
     }
 
     //    @GetMapping("/allcomentInPubli/{publiId}")

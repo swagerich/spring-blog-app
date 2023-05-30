@@ -72,10 +72,11 @@ public interface PublicarApi {
     ResponseEntity<List<PublicarDto>> findAll();
 
 //    @GetMapping(value = APP_ROOT + "/categoria/{categId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @GetMapping(value = APP_ROOT + "/categoria/page", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping(value = APP_ROOT + "/categories/page", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Devuelve la lista de publicaciones por categoria id.", description = "Este método le permite buscar publicaciones por categorias y devolver la lista de publicaciones que existen en la bd")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista de las  publicaciones por categoria"),
+            @ApiResponse(responseCode = "200", description = "Lista de paginas de las   publicaciones por categoria"),
     })
     ResponseEntity<PublicationWithPaginatedResponse> getPublicacionesByCategoriaId(@RequestParam(required = false) Long categId , @RequestParam(defaultValue = "0") int page , @RequestParam(defaultValue = "5") int size);
 
@@ -85,6 +86,23 @@ public interface PublicarApi {
             @ApiResponse(responseCode = "200", description = "Obtenemos la publicacion por el id"),
     })
     ResponseEntity<?> findById(@PathVariable Long idPublication);
+
+
+    @PostMapping(value = APP_ROOT + "/{idPublication}/like", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Incrementamos el like por publicacion.", description = "Este método le permite incrementar likes por la publicacion id  que existe en la bd")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Incrementacion de likes"),
+    })
+    ResponseEntity<?> increaseLike(@PathVariable Long idPublication);
+
+
+
+    @GetMapping(value = APP_ROOT + "/category/{catId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Devuelve la lista de publicaciones por categoria id.", description = "Este método le permite buscar publicaciones por categorias y devolver la lista de publicaciones que existen en la bd")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de las  publicaciones por categoria id"),
+    })
+    ResponseEntity<?> getAllPublicationsInCategoriaId(@PathVariable Long catId);
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(APP_ROOT + "/{id}")

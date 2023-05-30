@@ -14,4 +14,6 @@ public interface PublicarRepo extends CrudRepository<Publicar,Long> {
     List<Publicar> findAllComentarios();
 
     Page<Publicar> findByCategoriaId(Long categoriaId, Pageable pageable);
+
+    List<Publicar> findByCategoriaId(Long categooriaId);
 }

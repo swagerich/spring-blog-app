@@ -16,13 +16,13 @@ import java.util.List;
 
 public interface ComentarioApi {
 
-    @PostMapping(value = APP_ROOT_CO + "/inPublicacion/{publiId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = APP_ROOT_CO + "/inPublicacion/{publiId}/{userId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "crea un nuevo comentario en la publicacion.", description = "Este método le permite crear  comentarios en la publicacion")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "El objeto comentario crea/modifica"),
             @ApiResponse(responseCode = "400", description = "El objeto comentario no es válido")
     })
-    ResponseEntity<ComentarioDto> saveComentarioInPublicacion(@Valid @RequestBody ComentarioDto comentarioDto, @PathVariable Long publiId);
+    ResponseEntity<ComentarioDto> saveComentarioInPublicacion(@Valid @RequestBody ComentarioDto comentarioDto, @PathVariable Long publiId, @PathVariable Long userId);
 
     @GetMapping(value = APP_ROOT_CO + "/allcommentPage", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Devuelve la lista de comentarios paginados  por publicaciones id", description = "Este método le permite devolver la lista de comentarios paginados por el id de la publicacion que existen en la bd")

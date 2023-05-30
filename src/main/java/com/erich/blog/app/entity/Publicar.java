@@ -22,6 +22,7 @@ public class Publicar {
 
     private String titulo;
 
+    @Column(length = 3000)
     private String descripcion;
 
     private String contenido;
@@ -39,5 +40,8 @@ public class Publicar {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
+
+    @Column(name = "likes_count")
+    private Integer likesCount = 0;
 
 }

@@ -5,10 +5,12 @@ import com.erich.blog.app.dto.PublicarDto;
 import com.erich.blog.app.dto.response.CommentsWithPaginatedResponse;
 import com.erich.blog.app.entity.Comentario;
 import com.erich.blog.app.entity.Publicar;
+import com.erich.blog.app.entity.auth.User;
 import com.erich.blog.app.exception.BadRequestException;
 import com.erich.blog.app.exception.NotFoundException;
 import com.erich.blog.app.repository.ComentarioRepo;
 import com.erich.blog.app.repository.PublicarRepo;
+import com.erich.blog.app.repository.UserRepo;
 import com.erich.blog.app.services.ComentarioService;
 import com.erich.blog.app.services.PublicarService;
 import lombok.RequiredArgsConstructor;
@@ -25,25 +27,30 @@ import java.util.stream.Collectors;
 
 @Service @RequiredArgsConstructor @Slf4j
 public class ComentarioServiceImpl implements ComentarioService {
+    private final UserRepo userRepo;
     private final PublicarRepo publicarRepo;
 
     private final ComentarioRepo comentarioRepo;
 
     private final PublicarService publicarService;
 
+    //USUARIO  HACE UN COMENTARIO A LA PUBLICACION POR EL ID
     @Override
     @Transactional
-    public ComentarioDto save(ComentarioDto comentarioDto, Long pId) {
+    public ComentarioDto save(ComentarioDto comentarioDto, Long pId, Long userId) {
         Comentario comentario = ComentarioDto.toEntity(comentarioDto);
         PublicarDto publicar = publicarService.findById(pId);
+        User user = userRepo.findById(userId).orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
         Publicar publicarEnt = PublicarDto.toEntity(publicar);
         if (comentario != null) {
+            comentario.setUser(user);
             comentario.setPublicar(publicarEnt);
             return ComentarioDto.fromEntity(comentarioRepo.save(comentario));
         }
         return null;
     }
 
+    //EL USUARIO VERA UNA LISTA DE COMENTARIOS
     @Override
     @Transactional(readOnly = true)
     public List<ComentarioDto> findAll() {
@@ -64,6 +71,7 @@ public class ComentarioServiceImpl implements ComentarioService {
                 .orElseThrow(() -> new NotFoundException("Upps, No se encontro el id"));
     }
 
+    //EL USUARIO PODRA ACTUALIZAR SU COMENTARIO POR EL ID DE LA PUBLICACION
     @Override
     @Transactional
     public ComentarioDto updateComentarioIdBetweenPublicarId(ComentarioDto comentarioDto, Long comId, Long publId) {
@@ -78,6 +86,7 @@ public class ComentarioServiceImpl implements ComentarioService {
         return ComentarioDto.fromEntity(comentarioRepo.save(comentario));
     }
 
+    //ELIMINAMOS EL COMENTARIO
     @Override
     public void deleteComentarioById(Long comentId, Long publiId) {
         Optional<Comentario> comentario = comentarioRepo.findById(comentId);
@@ -91,7 +100,7 @@ public class ComentarioServiceImpl implements ComentarioService {
         }
     }
 
-
+    // EL USUARIO PODRA VER UNA LISTA PAGINADA DE COMENTARIO POR LA PUBLICACION
     @Override
     @Transactional(readOnly = true)
     public CommentsWithPaginatedResponse findAllCommentsPaginatedByPublicationId(Long publiId, Integer page, Integer size) {
@@ -103,6 +112,7 @@ public class ComentarioServiceImpl implements ComentarioService {
        return new CommentsWithPaginatedResponse(comentarioDtos,mapper);
     }
 
+    //EL USUARIO PODRA VER UN COMENTARIO POR LA PUPLICACION
     @Override
     @Transactional(readOnly = true)
     public ComentarioDto findByComentarioIdWithPublicarId(Long comId, Long publId) {

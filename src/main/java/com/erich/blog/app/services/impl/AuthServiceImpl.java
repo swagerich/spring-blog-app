@@ -106,4 +106,14 @@ public class AuthServiceImpl implements AuthService {
             throw new BadRequestException("Error:  " + signupRequest.email() + " ya esta en uso!");
         }
     }
+
+    public boolean existsName(String user){
+        User userName = userRepo.findByNombre(user).orElseThrow(() -> new NotFoundException("Usuario no existe!"));
+        return userRepo.existsByNombre(userName.getNombre());
+    }
+
+    public boolean existsMail(String mail){
+        User userMail = userRepo.findByEmail(mail).orElseThrow(() -> new NotFoundException("Email no existe!"));
+        return userRepo.existsByEmail(userMail.getEmail());
+    }
 }

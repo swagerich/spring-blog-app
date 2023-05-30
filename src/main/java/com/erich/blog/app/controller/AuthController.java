@@ -53,10 +53,10 @@ public class AuthController {
        return (User)userDetails;
     }
 
-    @PostMapping(value = {"/register-admin","/signup-admin"})
+   /* @PostMapping(value = {"/register-admin","/signup-admin"})
     public ResponseEntity<?> registroAdmin(@RequestBody SignupRequest signupRequest) {
         return new ResponseEntity<>(authService.regitroAdmin(signupRequest), HttpStatus.CREATED);
-    }
+    }*/
 
     @PostMapping("/refreshToken")
     public JwtResponse refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
@@ -72,4 +72,15 @@ public class AuthController {
                 }).orElseThrow(() -> new RuntimeException(
                         "Refresh token is not in database!"));
     }
+
+    @GetMapping("/existsName")
+    public ResponseEntity<Boolean> existsName(@RequestParam String name){
+        return new ResponseEntity<>(authService.existsName(name),HttpStatus.OK);
+    }
+
+    @GetMapping("/existsMail")
+    public ResponseEntity<Boolean> existsMail(@RequestParam String mail){
+        return new ResponseEntity<>(authService.existsMail(mail),HttpStatus.OK);
+    }
+
 }

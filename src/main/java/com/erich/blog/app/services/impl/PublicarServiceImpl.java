@@ -36,6 +36,12 @@ public class PublicarServiceImpl implements PublicarService {
 
     private final CategoriaRepo categoriaRepo;
 
+    /**
+     * falta eliminar el comentario por publicacion YA QUE NOSE PUEDE ELIMINAR LA PUBLICACION
+     * MEDIANTE EL ADMIN
+     */
+
+
     @Override
     @Transactional
     public PublicarDto save(PublicarDto publicarDto) {
@@ -147,5 +153,21 @@ public class PublicarServiceImpl implements PublicarService {
             return;
         }
         publicarRepo.deleteById(id);
+    }
+
+    @Override
+    public void increaseLikesInPublication(Long publiId) {
+        Publicar publicar = publicarRepo.findById(publiId).orElseThrow(() -> new NotFoundException("Publication Id no encontrada!"));
+        publicar.setLikesCount(publicar.getLikesCount() + 1);
+        publicarRepo.save(publicar);
+    }
+
+
+    @Override
+    public List<PublicarDto> getAllCategoriesByCategorieId(Long categoriId) {
+        Categoria cId = categoriaRepo.findById(categoriId).orElseThrow(() -> new NotFoundException(""));
+        return Streamable.of( publicarRepo.findByCategoriaId(cId.getId())).stream()
+                .map(PublicarDto::fromEntity)
+                .toList();
     }
 }

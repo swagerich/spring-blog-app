@@ -28,4 +28,7 @@ public interface PublicarService {
 
     PublicationWithPaginatedResponse getAllPublicacionesByCategoriaId(Long categId , int page, int size);
 
+    void increaseLikesInPublication(Long publiId);
+
+    List<PublicarDto> getAllCategoriesByCategorieId(Long categoriId);
 }

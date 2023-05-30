@@ -62,6 +62,18 @@ public class PublicarController implements PublicarApi {
     }
 
     @Override
+    public ResponseEntity<?> increaseLike(Long idPublication) {
+        publicarService.increaseLikesInPublication(idPublication);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @Override
+    public ResponseEntity<?> getAllPublicationsInCategoriaId(Long catId) {
+        return new ResponseEntity<>(publicarService.getAllCategoriesByCategorieId(catId),HttpStatus.OK);
+    }
+
+    @Override
     public ResponseEntity<?> delete(Long id) {
         publicarService.deleteById(id);
         return new ResponseEntity<>("Eliminado con exito!!", HttpStatus.NO_CONTENT);

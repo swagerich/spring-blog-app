@@ -9,7 +9,6 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @Data
@@ -20,7 +19,7 @@ public class PublicarDto {
     private Long id;
 
     @NotEmpty
-    @Column(unique = true)
+    @Column(unique = true) //FALTA VALIDAR EN EL FORMULARIO POST UNIQUE
     private String titulo;
 
     @NotEmpty
@@ -34,7 +33,8 @@ public class PublicarDto {
 
     private CategoriaDto categoria;
 
-    //  private Long categoriaId;
+    private Integer likesCount;
+
 
     public static PublicarDto fromEntity(Publicar publicar) {
         if (publicar == null) {
@@ -47,6 +47,7 @@ public class PublicarDto {
                 .descripcion(publicar.getDescripcion())
                 .contenido(publicar.getContenido())
                 .categoria(CategoriaDto.fromEntity(publicar.getCategoria()))
+                .likesCount(publicar.getLikesCount())
                 .build();
     }
 
@@ -60,6 +61,7 @@ public class PublicarDto {
                 .titulo(publicarDto.getTitulo())
                 .descripcion(publicarDto.getDescripcion())
                 .contenido(publicarDto.getContenido())
+                .likesCount(publicarDto.getLikesCount())
 //                .categoria(CategoriaDto.toEntity(publicarDto.getCategoria()))
                 .build();
     }

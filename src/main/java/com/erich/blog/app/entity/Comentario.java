@@ -1,5 +1,6 @@
 package com.erich.blog.app.entity;
 
+import com.erich.blog.app.entity.auth.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,9 +21,14 @@ public class Comentario {
 
     private String email;
 
+    @Column(length = 1500)
     private String texto;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publicacion_id")
     private Publicar publicar;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

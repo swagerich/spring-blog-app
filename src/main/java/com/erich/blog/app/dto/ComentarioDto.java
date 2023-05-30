@@ -25,6 +25,8 @@ public class ComentarioDto {
     @NotEmpty
     private String texto;
 
+    private UserDto user;
+
     public static ComentarioDto fromEntity(Comentario comentario) {
         if (comentario == null) {
             log.error("Comentario vino null");
@@ -35,6 +37,7 @@ public class ComentarioDto {
                 .nombre(comentario.getNombre())
                 .email(comentario.getEmail())
                 .texto(comentario.getTexto())
+                .user(UserDto.fromEntity(comentario.getUser()))
                 .build();
     }
 
