@@ -25,7 +25,7 @@ public class SpringBlogAppApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args)  {
 
-		/*Set<Role> roles = new HashSet<>();
+		Set<Role> roles = new HashSet<>();
 		Role roleAdmin = new Role();
 		roleAdmin.setAuthority("ROLE_ADMIN");
 		Role roleUser = new Role();
@@ -33,6 +33,6 @@ public class SpringBlogAppApplication implements CommandLineRunner {
 
 		roles.add(roleUser);
 		roles.add(roleAdmin);
-		roleRepo.saveAll(roles);*/
+		roleRepo.saveAll(roles);
 	}
 }

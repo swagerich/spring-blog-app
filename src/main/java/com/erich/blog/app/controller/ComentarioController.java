@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class ComentarioController implements ComentarioApi {
@@ -58,5 +59,10 @@ public class ComentarioController implements ComentarioApi {
     public ResponseEntity<?> deletByIdComentAndPubli(Long comentId, Long publiId) {
         comentarioService.deleteComentarioById(comentId, publiId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
+    public ResponseEntity<Set<ComentarioDto>> findAllComentarioInPublicacionById(Long publiId) {
+        return new ResponseEntity<>(comentarioService.findAllComentarioInPublicationId(publiId),HttpStatus.OK);
     }
 }

@@ -15,17 +15,15 @@ import com.erich.blog.app.security.jwt.JwtTokenProvider;
 import com.erich.blog.app.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -46,74 +44,70 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenServiceImpl refreshTokenService;
 
     @Override
-    public JwtResponse login(LoginRequest loginRequest) {
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password()));
-        SecurityContextHolder.getContext().setAuthentication(authenticate);
-        if (authenticate.isAuthenticated()) {
-            RefreshToken refreshToken = refreshTokenService.createRefreshToken(loginRequest.username());
+    public JwtResponse login(LoginRequest loginRequest) throws Exception {
+        this.auth(loginRequest.username(), loginRequest.password());
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(loginRequest.username());
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginRequest.username());
             return JwtResponse.builder()
                     .accessToken(jwtTokenProvider.generateToken(userDetails))
                     .refreshToken(refreshToken.getToken())
                     .tokenType("Bearer ").build();
 //        return jwtTokenProvider.generateToken(authenticate);
-        } else {
-            throw new UsernameNotFoundException("¡Solicitud de usuario inválida!");
+    }
+        @Override
+        public String registro (SignupRequest signupRequest){
+            this.validationFieldSignup(signupRequest);
+            User user = User.builder()
+                    .nombre(signupRequest.nombre())
+                    .apellido(signupRequest.apellido())
+                    .email(signupRequest.email())
+                    .password(passwordEncoder.encode(signupRequest.password()))
+                    .build();
+            Set<Role> roles = new HashSet<>();
+            Optional<Role> userRole;
+            if (signupRequest.nombre().contains("admin")) {
+                userRole = Optional.of(roleRepo.findByAuthority("ROLE_ADMIN").orElseThrow(() -> new NotFoundException("Role admin no encontrado!")));
+                Role role = userRole.get();
+                roles.add(role);
+                user.setRoles(roles);
+            } else {
+                userRole = Optional.of(roleRepo.findByAuthority("ROLE_USER").orElseThrow(() -> new NotFoundException("Role user no encontrado!")));
+                Role role = userRole.get();
+                roles.add(role);
+                user.setRoles(roles);
+            }
+            userRepo.save(user);
+
+            return "Registro con exito";
+        }
+
+        private void validationFieldSignup (SignupRequest signupRequest){
+            if (userRepo.existsByNombre(signupRequest.nombre())) {
+                throw new BadRequestException("Error: " + signupRequest.nombre() + "ya esta en uso!");
+            }
+            if (userRepo.existsByEmail(signupRequest.email())) {
+                throw new BadRequestException("Error:  " + signupRequest.email() + " ya esta en uso!");
+            }
+        }
+
+        @Transactional(readOnly = true)
+        public boolean existsName (String user){
+            User userName = userRepo.findByNombre(user).orElseThrow(() -> new NotFoundException("Usuario no existe!"));
+            return userRepo.existsByNombre(userName.getNombre());
+        }
+
+        @Transactional(readOnly = true)
+        public boolean existsMail (String mail){
+            User userMail = userRepo.findByEmail(mail).orElseThrow(() -> new NotFoundException("Email no existe!"));
+            return userRepo.existsByEmail(userMail.getEmail());
+        }
+        private void auth (String username, String password) throws Exception {
+            try {
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            } catch (DisabledException e) {
+                throw new Exception("User DISABLED" + e.getMessage());
+            } catch (BadCredentialsException e) {
+                throw new Exception("Invalid credentials" + e.getMessage());
+            }
         }
     }
-
-    @Override
-    public String registro(SignupRequest signupRequest) {
-        this.validationFieldSignup(signupRequest);
-        User user = User.builder()
-                .nombre(signupRequest.nombre())
-                .apellido(signupRequest.apellido())
-                .email(signupRequest.email())
-                .password(passwordEncoder.encode(signupRequest.password()))
-                .build();
-        Set<Role> roles = new HashSet<>();
-        Optional<Role> userRole = roleRepo.findByAuthority("ROLE_USER");
-        if (userRole.isPresent()) {
-            roles.add(userRole.get());
-            user.setRoles(roles);
-        }
-        userRepo.save(user);
-
-        return "Registro con exito";
-    }
-
-    public String regitroAdmin(SignupRequest signupRequest) {
-        this.validationFieldSignup(signupRequest);
-        User user = User.builder()
-                .nombre(signupRequest.nombre())
-                .email(signupRequest.email())
-                .apellido(signupRequest.apellido())
-                .password(passwordEncoder.encode(signupRequest.password()))
-                .build();
-        Set<Role> roles = new HashSet<>();
-        Role roleAdmin = roleRepo.findByAuthority("ROLE_ADMIN").orElseThrow(() -> new NotFoundException("ROLE ADMIN NO ENCONTRADA!"));
-        roles.add(roleAdmin);
-        user.setRoles(roles);
-        userRepo.save(user);
-        return "Administrador " + user.getUsername() + " registrado con exito";
-    }
-
-    private void validationFieldSignup(SignupRequest signupRequest) {
-        if (userRepo.existsByNombre(signupRequest.nombre())) {
-            throw new BadRequestException("Error: " + signupRequest.nombre() + "ya esta en uso!");
-        }
-        if (userRepo.existsByEmail(signupRequest.email())) {
-            throw new BadRequestException("Error:  " + signupRequest.email() + " ya esta en uso!");
-        }
-    }
-
-    public boolean existsName(String user){
-        User userName = userRepo.findByNombre(user).orElseThrow(() -> new NotFoundException("Usuario no existe!"));
-        return userRepo.existsByNombre(userName.getNombre());
-    }
-
-    public boolean existsMail(String mail){
-        User userMail = userRepo.findByEmail(mail).orElseThrow(() -> new NotFoundException("Email no existe!"));
-        return userRepo.existsByEmail(userMail.getEmail());
-    }
-}

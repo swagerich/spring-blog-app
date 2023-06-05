@@ -62,7 +62,7 @@ public class HandlerException {
     }
 
     @ExceptionHandler(Exception.class)
-    public ProblemDetail HandlerNotFoundException(Exception e) {
+    public ProblemDetail handlerException(Exception e) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         problemDetail.setTitle("SERVER_ERROR");
         problemDetail.setDetail(e.getMessage());

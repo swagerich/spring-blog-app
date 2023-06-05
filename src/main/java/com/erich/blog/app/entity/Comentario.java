@@ -4,6 +4,8 @@ import com.erich.blog.app.entity.auth.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -11,7 +13,7 @@ import lombok.*;
 @Entity
 @Table(name = "comentarios")
 @Builder
-public class Comentario {
+public class Comentario implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +27,7 @@ public class Comentario {
     private String texto;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "publicacion_id")
+    @JoinColumn(name = "publicacion_id" ,foreignKey = @ForeignKey(name = "FK_publicar"))
     private Publicar publicar;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -52,6 +52,11 @@ public class PublicarController implements PublicarApi {
     }
 
     @Override
+    public ResponseEntity<List<PublicarDto>> findAllAdmin() {
+        return new ResponseEntity<>(publicarService.findAllAdmin(),HttpStatus.OK);
+    }
+
+    @Override
     public ResponseEntity<PublicationWithPaginatedResponse> getPublicacionesByCategoriaId(Long categId, int page, int size) {
         return new ResponseEntity<>(publicarService.getAllPublicacionesByCategoriaId(categId,page,size),HttpStatus.OK);
     }
@@ -59,6 +64,11 @@ public class PublicarController implements PublicarApi {
     @Override
     public ResponseEntity<?> findById(Long idPublication) {
         return new ResponseEntity<>(publicarService.findById(idPublication),HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> findByIdAdmin(Long idPublication) {
+        return new ResponseEntity<>(publicarService.findByIdAdmin(idPublication),HttpStatus.OK);
     }
 
     @Override

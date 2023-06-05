@@ -36,8 +36,6 @@ public class CategoriaDto {
                 .id(categoria.getId())
                 .nombre(categoria.getNombre())
                 .descripcion(categoria.getDescripcion())
-//                .publicars(categoria.getPublicars() != null ?
-//                        categoria.getPublicars().stream().map(PublicarDto::fromEntity).collect(Collectors.toList()) : null)
                 .build();
     }
 

@@ -8,14 +8,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static com.erich.blog.app.utils.paths.Path.*;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ComentarioApi {
-
+    @PreAuthorize(value = "hasRole('USER')")
     @PostMapping(value = APP_ROOT_CO + "/inPublicacion/{publiId}/{userId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "crea un nuevo comentario en la publicacion.", description = "Este método le permite crear  comentarios en la publicacion")
     @ApiResponses(value = {
@@ -60,10 +63,21 @@ public interface ComentarioApi {
     })
     ResponseEntity<ComentarioDto> updateComentarioIdForPublicarId(@Valid @RequestBody ComentarioDto comentarioDto, @PathVariable Long comId, @PathVariable Long publId);
 
+    @PreAuthorize(value = "hasRole('USER')")
     @DeleteMapping(value = APP_ROOT_CO + "/{comentId}/{publiId}")
     @Operation(summary = "Eliminamos el comentario de la publicacion", description = "El metodo permite eliminar el comentario de la publicacion mediante su id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Eliminamos el comentario "),
     })
     ResponseEntity<?> deletByIdComentAndPubli(@PathVariable Long comentId, @PathVariable Long publiId);
+
+
+    @Secured(value = "ROLE_ADMIN")
+    @GetMapping(value = APP_ROOT_CO + "/comments/{publiId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Devuelve la lista de comentarios  por publicaciones id", description = "Este método le permite devolver la lista de comentarios  por el id de la publicacion que existen en la bd")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de los comentarios con paginacion"),
+    })
+    ResponseEntity<Set<ComentarioDto>> findAllComentarioInPublicacionById(@PathVariable Long publiId);
+
 }

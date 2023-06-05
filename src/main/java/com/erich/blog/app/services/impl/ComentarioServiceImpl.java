@@ -88,6 +88,7 @@ public class ComentarioServiceImpl implements ComentarioService {
 
     //ELIMINAMOS EL COMENTARIO
     @Override
+    @Transactional
     public void deleteComentarioById(Long comentId, Long publiId) {
         Optional<Comentario> comentario = comentarioRepo.findById(comentId);
         PublicarDto publId = publicarService.findById(publiId);
@@ -125,4 +126,11 @@ public class ComentarioServiceImpl implements ComentarioService {
     }
 
 
+    @Override
+    @Transactional(readOnly = true)
+    public Set<ComentarioDto> findAllComentarioInPublicationId(Long pubId) {
+        Publicar publication = publicarRepo.findById(pubId).orElseThrow(()  ->  new NotFoundException("Publicacion id no encontrada!"));
+        Set<Comentario> comment = comentarioRepo.findAllByPublicarId(publication.getId());
+        return comment.stream().map(ComentarioDto::fromEntity).collect(Collectors.toSet());
+    }
 }

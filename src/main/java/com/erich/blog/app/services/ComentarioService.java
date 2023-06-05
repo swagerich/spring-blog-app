@@ -4,6 +4,7 @@ import com.erich.blog.app.dto.ComentarioDto;
 import com.erich.blog.app.dto.response.CommentsWithPaginatedResponse;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ComentarioService {
 
@@ -23,5 +24,6 @@ public interface ComentarioService {
 
     ComentarioDto findByComentarioIdWithPublicarId(Long comId, Long publId);
 
+    Set<ComentarioDto> findAllComentarioInPublicationId(Long cateId);
 
 }

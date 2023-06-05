@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,8 +72,15 @@ public interface PublicarApi {
     })
     ResponseEntity<List<PublicarDto>> findAll();
 
+    @Secured(value = "ROLE_ADMIN")
+    @GetMapping(value = APP_ROOT + "/allAdmin", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Devuelve la lista de publicaciones para el admin.", description = "Este método le permite buscar y devolver la lista de publicaciones que existen en la bd")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de las  publicaciones"),
+    })
+    ResponseEntity<List<PublicarDto>> findAllAdmin();
 //    @GetMapping(value = APP_ROOT + "/categoria/{categId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ADMIN')")
+    @Secured(value = "ROLE_ADMIN")
     @GetMapping(value = APP_ROOT + "/categories/page", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Devuelve la lista de publicaciones por categoria id.", description = "Este método le permite buscar publicaciones por categorias y devolver la lista de publicaciones que existen en la bd")
     @ApiResponses(value = {
@@ -86,6 +94,14 @@ public interface PublicarApi {
             @ApiResponse(responseCode = "200", description = "Obtenemos la publicacion por el id"),
     })
     ResponseEntity<?> findById(@PathVariable Long idPublication);
+
+    @Secured(value = "ROLE_ADMIN")
+    @GetMapping(value = APP_ROOT + "/{idPublication}/admin", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Devuelve la publicacion por el id.", description = "Este método le permite buscar por el id y devolver la publicacion que existe en la bd")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Obtenemos la publicacion por el id"),
+    })
+    ResponseEntity<?> findByIdAdmin(@PathVariable Long idPublication);
 
 
     @PostMapping(value = APP_ROOT + "/{idPublication}/like", produces = MediaType.APPLICATION_JSON_VALUE)

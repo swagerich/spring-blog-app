@@ -35,6 +35,8 @@ public class PublicarDto {
 
     private Integer likesCount;
 
+    private byte[] photo;
+
 
     public static PublicarDto fromEntity(Publicar publicar) {
         if (publicar == null) {
@@ -48,6 +50,7 @@ public class PublicarDto {
                 .contenido(publicar.getContenido())
                 .categoria(CategoriaDto.fromEntity(publicar.getCategoria()))
                 .likesCount(publicar.getLikesCount())
+                .photo(publicar.getPhoto())
                 .build();
     }
 
@@ -62,7 +65,8 @@ public class PublicarDto {
                 .descripcion(publicarDto.getDescripcion())
                 .contenido(publicarDto.getContenido())
                 .likesCount(publicarDto.getLikesCount())
-//                .categoria(CategoriaDto.toEntity(publicarDto.getCategoria()))
+                .categoria(CategoriaDto.toEntity(publicarDto.getCategoria()))
+                .photo(publicarDto.getPhoto())
                 .build();
     }
 

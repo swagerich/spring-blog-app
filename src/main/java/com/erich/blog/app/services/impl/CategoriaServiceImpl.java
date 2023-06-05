@@ -61,6 +61,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
+    @Transactional
     public void deleteByIdCategoria(Long id) {
         if (id == null) {
             log.error("ID vino null");

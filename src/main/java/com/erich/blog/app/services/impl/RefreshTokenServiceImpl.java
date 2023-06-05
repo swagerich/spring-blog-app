@@ -24,11 +24,12 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public RefreshToken createRefreshToken(String username) {
-        return RefreshToken.builder()
+        RefreshToken refreshToken = RefreshToken.builder()
                 .user(userRepo.findByNombre(username).orElseThrow())
                 .token(UUID.randomUUID().toString())
                 .expiryDate(Instant.now().plusMillis(refreshTokenDurationMs))
                 .build();
+        return refreshTokenRepo.save(refreshToken);
     }
 
     public Optional<RefreshToken> findByToken(String token) {

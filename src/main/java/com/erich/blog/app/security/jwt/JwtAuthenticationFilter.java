@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Component @RequiredArgsConstructor
+@Component @RequiredArgsConstructor @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -58,11 +59,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 usernameEmail = jwtTokenProvider.extractUsername(jwt);
             }catch (ExpiredJwtException e){
                 e.printStackTrace();
-                System.out.println("JWT token has expired");
+                log.info("JWT token has expired");
             }catch (Exception ex){
                 ex.printStackTrace();
-                System.out.println("Error");
+                log.info("Error");
             }
+        }
+        else{
+            log.info("No comienza con la palabra bearer");
         }
         if (usernameEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(usernameEmail);
@@ -75,6 +79,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 );
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
+        }else{
+            log.info("Token invalid");
         }
         filterChain.doFilter(request, response);
     }

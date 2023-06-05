@@ -6,7 +6,7 @@ import com.erich.blog.app.dto.auth.request.SignupRequest;
 
 public interface AuthService {
 
-    JwtResponse login(LoginRequest loginRequest);
+    JwtResponse login(LoginRequest loginRequest) throws Exception;
 
     String registro(SignupRequest signupRequest);
 

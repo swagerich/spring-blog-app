@@ -5,12 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-import java.util.List;
+import java.util.Set;
 
 public interface ComentarioRepo extends JpaRepository<Comentario,Long> {
 
-    List<Comentario> findByPublicarId(Long publiId);
+    Set<Comentario> findAllByPublicarId(Long publiId);
 
     Comentario findComentarioByIdAndPublicarId(Long comId,Long pubId);
 

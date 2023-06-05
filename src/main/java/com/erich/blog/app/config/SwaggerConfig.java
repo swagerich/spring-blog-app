@@ -21,7 +21,7 @@ public class SwaggerConfig {
 
         return new OpenAPI().info(new Info().title("Spring Blog API Documentation")
                         .description("Spring Blog API REST By Erich")
-                        .version("v3.0.2")
+                        .version("v3.0.3")
                         .license(new License().name("Apache 3.0").url("https://spring.io")))
                 .externalDocs(new ExternalDocumentation()
                         .description("Spring Blog Proyect Documentation ")

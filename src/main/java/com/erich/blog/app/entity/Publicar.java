@@ -1,8 +1,10 @@
 package com.erich.blog.app.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "publicacion")
 @Builder
-public class Publicar {
+public class Publicar implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +30,12 @@ public class Publicar {
     private String contenido;
 
     @Lob
+    @Column(length = 500)
+    @JsonIgnore
     private byte[] photo;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<Comentario> comentarios = new HashSet<>();
 
     public Integer getPhotoHashCode() {
@@ -38,7 +43,7 @@ public class Publicar {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoria_id")
+    @JoinColumn(name = "categoria_id",foreignKey = @ForeignKey(name = "FK_categorias"))
     private Categoria categoria;
 
     @Column(name = "likes_count")
