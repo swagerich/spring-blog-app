@@ -46,7 +46,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests().requestMatchers("/api/v1/auth/**",
                         "/api/v1/publicar/all",
                         "/api/v1/publicar/{idPublication}",
-                        "/api/v1/publicar/{idPublication}/like",
+                        "/api/v1/publicar/likes/{idPublication}",
                         "/api/v1/publicar/category/{catId}",
                         "/api/v1/categoria/all",
                         "/api/v1/comentario/{comdId}/{publId}",
@@ -62,7 +62,7 @@ public class SecurityConfig {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authenticationProvider(AuthenticationProvider())
+                .authenticationProvider(authenticationProvider())
                 .exceptionHandling(e -> e.authenticationEntryPoint(authenticationEntryPoint))
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -70,7 +70,7 @@ public class SecurityConfig {
 
 
     @Bean
-    public DaoAuthenticationProvider AuthenticationProvider() {
+    public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userService);
         provider.setPasswordEncoder(passwordEncoder());

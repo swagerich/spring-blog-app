@@ -1,6 +1,6 @@
 package com.erich.blog.app.controller;
 
-import com.erich.blog.app.controller.Api.CategoriaApi;
+import com.erich.blog.app.controller.api.CategoriaApi;
 import com.erich.blog.app.dto.CategoriaDto;
 import com.erich.blog.app.services.impl.CategoriaServiceImpl;
 import org.springframework.http.HttpStatus;

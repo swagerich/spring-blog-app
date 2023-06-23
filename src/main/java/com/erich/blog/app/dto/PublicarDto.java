@@ -2,7 +2,6 @@ package com.erich.blog.app.dto;
 
 import com.erich.blog.app.entity.Publicar;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
@@ -19,7 +18,7 @@ public class PublicarDto {
     private Long id;
 
     @NotEmpty
-    @Column(unique = true) //FALTA VALIDAR EN EL FORMULARIO POST UNIQUE
+    //@Column(unique = true)
     private String titulo;
 
     @NotEmpty

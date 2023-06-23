@@ -29,7 +29,6 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String nombre;
 
-    @Column(nullable = false, unique = true)
     private String apellido;
 
     @Column(nullable = false, unique = true)

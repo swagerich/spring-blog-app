@@ -1,4 +1,4 @@
-package com.erich.blog.app.controller.Api;
+package com.erich.blog.app.controller.api;
 
 import static com.erich.blog.app.utils.paths.Path.*;
 
@@ -93,7 +93,7 @@ public interface PublicarApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Obtenemos la publicacion por el id"),
     })
-    ResponseEntity<?> findById(@PathVariable Long idPublication);
+    ResponseEntity<PublicarDto> findById(@PathVariable Long idPublication);
 
     @Secured(value = "ROLE_ADMIN")
     @GetMapping(value = APP_ROOT + "/{idPublication}/admin", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -101,24 +101,29 @@ public interface PublicarApi {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Obtenemos la publicacion por el id"),
     })
-    ResponseEntity<?> findByIdAdmin(@PathVariable Long idPublication);
+    ResponseEntity<PublicarDto> findByIdAdmin(@PathVariable Long idPublication);
 
-
-    @PostMapping(value = APP_ROOT + "/{idPublication}/like", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Secured(value = {"ROLE_USER","ROLE_ADMIN"})
+    @PostMapping(value = APP_ROOT + "/{idPublication}/like", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Incrementamos el like por publicacion.", description = "Este método le permite incrementar likes por la publicacion id  que existe en la bd")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Incrementacion de likes"),
     })
-    ResponseEntity<?> increaseLike(@PathVariable Long idPublication);
+    ResponseEntity<PublicarDto> increaseLike(@PathVariable Long idPublication);
 
-
+    @GetMapping(value = APP_ROOT + "/likes/{idPublication}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Obtenmos los likes por publicacion Id", description = "Este método le permite obtener todos los  likes por la publicacion id  que existe en la bd")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Obtenemos todos los likes"),
+    })
+    ResponseEntity<Integer> getLikesInPublicationId(@PathVariable Long idPublication);
 
     @GetMapping(value = APP_ROOT + "/category/{catId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Devuelve la lista de publicaciones por categoria id.", description = "Este método le permite buscar publicaciones por categorias y devolver la lista de publicaciones que existen en la bd")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de las  publicaciones por categoria id"),
     })
-    ResponseEntity<?> getAllPublicationsInCategoriaId(@PathVariable Long catId);
+    ResponseEntity<List<PublicarDto>> getAllPublicationsInCategoriaId(@PathVariable Long catId);
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(APP_ROOT + "/{id}")

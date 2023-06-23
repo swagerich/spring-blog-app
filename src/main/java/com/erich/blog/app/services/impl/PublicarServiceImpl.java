@@ -43,6 +43,7 @@ public class PublicarServiceImpl implements PublicarService {
         Publicar publicar = PublicarDto.toEntity(publicarDto);
         if (publicar != null) {
             publicar.setCategoria(categoria);
+            publicar.setLikesCount(0);
             return PublicarDto.fromEntity(publicarRepo.save(publicar));
         }
         return null;
@@ -105,7 +106,7 @@ public class PublicarServiceImpl implements PublicarService {
         //Categoria categoria = categoriaRepo.findById(publicarDto.getCategoria().getId()).orElseThrow(() -> new CategoriaNotFoundException("Categoria id no encontrado"));
         Publicar publicar = PublicarDto.toEntity(publicarDto);
         if (publicar != null) {
-           // publicar.setCategoria(categoria);
+            // publicar.setCategoria(categoria);
             if (!file.isEmpty()) {
                 publicarDto.setPhoto(file.getBytes());
             }
@@ -121,7 +122,7 @@ public class PublicarServiceImpl implements PublicarService {
             throw new NotFoundException("No se encontro el id : " + id);
         }
         Publicar publicar = PublicarDto.toEntity(publicarDto);
-        if(publicar != null ) {
+        if (publicar != null) {
             Categoria categoria = categoriaRepo.findById(publicar.getCategoria().getId()).orElseThrow(() -> new NotFoundException("Categoria id no encontrado"));
             return publicarRepo.findById(id).map(p -> {
                 p.setTitulo(publicarDto.getTitulo());
@@ -138,7 +139,7 @@ public class PublicarServiceImpl implements PublicarService {
                 }
                 return PublicarDto.fromEntity(publicarRepo.save(p));
             }).orElseThrow(() -> new BadRequestException("No se pudo actualizar con la foto"));
-        }else{
+        } else {
             throw new RuntimeException("Ocurrio un problema al actualizar!");
         }
     }
@@ -172,10 +173,17 @@ public class PublicarServiceImpl implements PublicarService {
     }
 
     @Override
+    @Transactional
     public void increaseLikesInPublication(Long publiId) {
         Publicar publicar = publicarRepo.findById(publiId).orElseThrow(() -> new NotFoundException("Publication Id no encontrada!"));
         publicar.setLikesCount(publicar.getLikesCount() + 1);
         publicarRepo.save(publicar);
+    }
+
+    @Transactional(readOnly = true)
+    public Integer getAllLikesInPublicationId(Long publiId) {
+        Publicar publicar = publicarRepo.findById(publiId).orElseThrow(() -> new NotFoundException("Publication Id no encontrada!"));
+        return publicar.getLikesCount();
     }
 
 

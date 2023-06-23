@@ -1,6 +1,6 @@
 package com.erich.blog.app.controller;
 
-import com.erich.blog.app.controller.Api.PublicarApi;
+import com.erich.blog.app.controller.api.PublicarApi;
 import com.erich.blog.app.dto.PublicarDto;
 import com.erich.blog.app.dto.response.PublicationWithPaginatedResponse;
 import com.erich.blog.app.services.impl.PublicarServiceImpl;
@@ -62,24 +62,28 @@ public class PublicarController implements PublicarApi {
     }
 
     @Override
-    public ResponseEntity<?> findById(Long idPublication) {
+    public ResponseEntity<PublicarDto> findById(Long idPublication) {
         return new ResponseEntity<>(publicarService.findById(idPublication),HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<?> findByIdAdmin(Long idPublication) {
+    public ResponseEntity<PublicarDto> findByIdAdmin(Long idPublication) {
         return new ResponseEntity<>(publicarService.findByIdAdmin(idPublication),HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<?> increaseLike(Long idPublication) {
+    public ResponseEntity<PublicarDto> increaseLike(Long idPublication) {
         publicarService.increaseLikesInPublication(idPublication);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<Integer> getLikesInPublicationId(Long idPublication) {
+        return new ResponseEntity<>(publicarService.getAllLikesInPublicationId(idPublication),HttpStatus.OK);
+    }
 
     @Override
-    public ResponseEntity<?> getAllPublicationsInCategoriaId(Long catId) {
+    public ResponseEntity<List<PublicarDto>> getAllPublicationsInCategoriaId(Long catId) {
         return new ResponseEntity<>(publicarService.getAllCategoriesByCategorieId(catId),HttpStatus.OK);
     }
 

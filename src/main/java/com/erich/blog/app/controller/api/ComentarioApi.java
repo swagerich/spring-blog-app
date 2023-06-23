@@ -1,4 +1,4 @@
-package com.erich.blog.app.controller.Api;
+package com.erich.blog.app.controller.api;
 
 import com.erich.blog.app.dto.ComentarioDto;
 import com.erich.blog.app.dto.response.CommentsWithPaginatedResponse;

@@ -1,6 +1,6 @@
 package com.erich.blog.app.controller;
 
-import com.erich.blog.app.controller.Api.ComentarioApi;
+import com.erich.blog.app.controller.api.ComentarioApi;
 import com.erich.blog.app.dto.ComentarioDto;
 import com.erich.blog.app.dto.response.CommentsWithPaginatedResponse;
 import com.erich.blog.app.services.impl.ComentarioServiceImpl;
